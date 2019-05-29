@@ -3,7 +3,7 @@ import mysql.connector
 from mysql.connector import Error
 def ConnecctMysql():
     try:
-        mySQLconnection = mysql.connector.connect(host='3.80.151.95',database='alexaTest',user='root',password='123')
+        mySQLconnection = mysql.connector.connect(host='XX.XX.XX.X',database='alexaTest',user='root',password='Paassword')
         return mySQLconnection
     except Error as e:
         print("Error while connecting to MySQL", e)
