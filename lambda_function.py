@@ -4,6 +4,7 @@ from mysql.connector import Error
 def ConnecctMysql():
     try:
         mySQLconnection = mysql.connector.connect(host='XX.XX.XX.X',database='alexaTest',user='root',password='Paassword')
+        # mySQLconnection = mysql.connector.connect(host='3.80.151.95',database='alexaTest',user='root',password='123')
         return mySQLconnection
     except Error as e:
         print("Error while connecting to MySQL", e)
@@ -105,10 +106,7 @@ def intent_scheme(event):
 def get_Product(event):
     # try:
     if 'value' in event['request']['intent']['slots']['products'] and event['request']['intent']['slots']['products']['resolutions']['resolutionsPerAuthority'][0]['status']['code'] == 'ER_SUCCESS_MATCH':
-    # if event['request']['intent']['slots']['products']['resolutions']['resolutionsPerAuthority'][0]['status']['code'] == 'ER_SUCCESS_MATCH':
-        # Product_name = event['request']['intent']['slots']['products']['value']
         Product_name = event['request']['intent']['slots']['products']['resolutions']['resolutionsPerAuthority'][0]['values'][0]['value']['name']
-        # Product_name = 
     else:
         wrongname_MSG = "Sorry This product is not availble as per request."
         reprompt_MSG = "Do you want to hear more about a particular Product?"
@@ -118,12 +116,8 @@ def get_Product(event):
     null = None
 
     if 'value' in (event['request']['intent']['slots']['countries']) :
-        # if 'value' in event['request']['intent']['slots']['countries'] and not(event['request']['intent']['slots']['countries']['value'] is None) and str(event['request']['intent']['slots']['countries']['value']) != 'null' :
-        # if if event['request']['intent']['slots']['countries']['resolutions']['resolutionsPerAuthority'][0]['status']['code'] == 'ER_SUCCESS_MATCH':
-        # country_name = event['request']['intent']['slots']['countries']['value']
         country_name = event['request']['intent']['slots']['countries']['resolutions']['resolutionsPerAuthority'][0]['values'][0]['value']['name']
     else:
-        # print 'I AM IN ELSE'
         information = ProductDetailsInformation(Product_name)
         if information:
             mreponse = "As per Your selected Product " + str(Product_name) +  " is " + str(information[0])+ "and this Product Avalible in "+str(information[1]) 
@@ -137,6 +131,7 @@ def get_Product(event):
             card_TEXT = "Use the full form."
             card_TITLE = "Wrong technology."
             return output_json_builder_with_reprompt_and_card(wrongname_MSG, card_TEXT, card_TITLE, reprompt_MSG, False)
+    
     checkPrice = ProductContryWisePrice(Product_name ,country_name)
     if checkPrice:
         myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(country_name) + " price is " + str(checkPrice)
@@ -150,25 +145,6 @@ def get_Product(event):
         card_TEXT = "Use the full form."
         card_TITLE = "Wrong technology."
         return output_json_builder_with_reprompt_and_card(wrongname_MSG, card_TEXT, card_TITLE, reprompt_MSG, False)
-
-# def productDetails(Product_name):
-#     # Product_name = event['request']['intent']['slots']['products']['value']
-#     information = ProductDetailsInformation(Product_name)
-#     if information:
-#         mreponse = 'As per Your selected Product ' + str(Product_name) +  " is " + str(information[0])+ "and \
-#         this Product Avalible in "+str(information[1]) 
-#         reprompt_MSG = "Do you want to hear more about a particular Product?"
-#         card_TEXT = "You've picked " + str(Product_name .lower())
-#         card_TITLE = "You've picked " + str(Product_name .lower())
-#         return output_json_builder_with_reprompt_and_card(myreponse, card_TEXT, card_TITLE,reprompt_MSG, False)
-#     else:
-#         wrongname_MSG = "Sorry This product is not availble as per request."
-#         reprompt_MSG = "Do you want to hear more about a particular Product?"
-#         card_TEXT = "Use the full form."
-#         card_TITLE = "Wrong technology."
-#         return output_json_builder_with_reprompt_and_card(wrongname_MSG, card_TEXT, card_TITLE, reprompt_MSG, False)
-
-
 
 def stop_the_skill(event):
     stop_MSG = "Thank you. Bye! we will meet after some time"
