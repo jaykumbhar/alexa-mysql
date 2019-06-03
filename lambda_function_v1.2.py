@@ -1,7 +1,6 @@
 import json
 import urllib2
 BASEURL = 'http://3.80.151.95:6500/api/'
-# BASEURL = 'http://127.0.0.1:8000/api/'
 
 def lambda_handler(event, context):
     # event = event['payload']['content']['invocationRequest']['body']
@@ -38,8 +37,6 @@ def intent_scheme(event):
         return GetAllCountryInformationWithinProduct(event)
     if intent_name == "onlyCountry":
         return getOnlyCountryData(event)
-    if intent_name == "onlyRegions":
-        return getOnlyRegionsData(event)
     elif intent_name in ["AMAZON.NoIntent", "AMAZON.StopIntent", "AMAZON.CancelIntent"]:
         return stop_the_skill(event)
     elif intent_name == "AMAZON.HelpIntent":
@@ -263,7 +260,12 @@ def GetAllCountryInformationWithinProduct(event):
         checkPrice = ', '.join(map(str, Mysenteces))
         product_calculate = [s.lower() for s in AllProducts]
         product_count = set(product_calculate)
+        # unique_data = set(mdata)
+        # countries_count = len(unique_data)
+        # countries = list(unique_data)
+        # contriesstring = ' '.join(map(str, countries))
         mreponse = 'As per Your requested '+str(country_name)+' '+ str(len(product_count)) +  " products are availble following are detail information "+str(checkPrice) 
+        # mreponse = 'As per Your requested '+str(numbercount)+' packs of '+ str(Product_name) +  " are availble in " + str(contriesstring)+str(event['session']['attributes'])
 
         reprompt_MSG = "Do you want to hear more about AllProducts OR a particular Product ?"
         card_TEXT = "You've picked " + str(country_name .lower())
@@ -277,29 +279,6 @@ def GetAllCountryInformationWithinProduct(event):
         return output_json_builder_with_reprompt_and_card(wrongname_MSG, card_TEXT, card_TITLE, reprompt_MSG, False,False)
 
 
-
-def getOnlyRegionsData(event):
-    region_name = event['request']['intent']['slots']['regions']['resolutions']['resolutionsPerAuthority'][0]['values'][0]['value']['name']
-    ResponseDataJson = SendResionDataReq(region_name)
-    if 'attributes' in event['session']:
-        mytestSession = event['session']['attributes']
-        if 'Product' in mytestSession:
-            Product = mytestSession['Product']
-            return getProductCountryWiseDetailsPrice(Product,region_name,event)
-        else:
-            mytestSession["Region"]=region_name
-    else:
-        mytestSession = {"Region":region_name }
-    availabepacks = ResponseDataJson['data']['information']
-    countrycount = availabepacks['countrycount']
-    availabepacks_count = availabepacks['availabepacks']
-    mreponse = 'As per Your requested '+str(region_name)+' ' + str(availabepacks)+' Packs are availble in '+ str(countrycount) +  " countries. DO You want to check All Countries information or specific Countries information ?" 
-    reprompt_MSG = "DO You want to check All Countries information or specific Countries information ?"
-    card_TEXT = "You've picked " + str(region_name .lower())
-    card_TITLE = "You've picked " + str(region_name .lower())
-    return output_json_builder_with_reprompt_and_card(mreponse, card_TEXT, card_TITLE,reprompt_MSG, False,mytestSession)
-
-
 def SendCountryDataReq(country_name):
     url = str(BASEURL)+'countrywiseproductcheck/'+str(country_name)
     print url
@@ -311,23 +290,6 @@ def SendCountryDataReq(country_name):
         reprompt_MSG = "Do you want to hear more about a particular country?"
         card_TEXT = "Use the full form."
         card_TITLE = "Wrong country name."
-        return output_json_builder_with_reprompt_and_card(wrongname_MSG, card_TEXT, card_TITLE, reprompt_MSG, False,False) 
-    ResponseDataJson = json.loads(ResponseData.read())
-    return ResponseDataJson
-
-
-
-def SendResionDataReq(region_name):
-    url = str(BASEURL)+'regionwisecountrycheck/'+str(region_name)
-    print url
-    try:
-        ResponseData = urllib2.urlopen(url)
-    except Exception as e:
-        print e
-        wrongname_MSG = "Sorry This Region is not availble as per request."
-        reprompt_MSG = "Do you want to hear more about a particular Resion?"
-        card_TEXT = "Use the full form."
-        card_TITLE = "Wrong Resion name."
         return output_json_builder_with_reprompt_and_card(wrongname_MSG, card_TEXT, card_TITLE, reprompt_MSG, False,False) 
     ResponseDataJson = json.loads(ResponseData.read())
     return ResponseDataJson
@@ -398,18 +360,17 @@ def output_json_builder_with_reprompt_and_card(outputSpeach_text, card_text, car
     return response_dict
 
 # if __name__== "__main__":
+# print(get_Product(event))
+# # #     # print(ProductContryWisePrice('cipla','india'))
+# #     # print(fetchProducts())
+#     Product_name = 'cipla'
+#     information = ProductDetailsInformation(Product_name)
+#     contries = [x.keys()[0] for x in information]
+#     for data in information:
+#         for con in contries:
+#             if con in data.keys():
+#                 mymsg = data[con]
 
-    # print(get_Product(event))
-    # #     # print(ProductContryWisePrice('cipla','india'))
-    #     # print(fetchProducts())
-    # Product_name = 'cipla'
-    # information = ProductDetailsInformation(Product_name)
-    # contries = [x.keys()[0] for x in information]
-    # for data in information:
-    #     for con in contries:
-    #         if con in data.keys():
-    #             mymsg = data[con]
-
-    # contriesstring = ','.join(map(str, contries))
-    # mreponse = 'As per Your selected Product '+ str(Product_name) +  " is " + str(mymsg)+ "and this Product Avalible in "+str(contriesstring) 
-    # print(SendResionDataReq('EM'))
+#     contriesstring = ','.join(map(str, contries))
+#     mreponse = 'As per Your selected Product '+ str(Product_name) +  " is " + str(mymsg)+ "and this Product Avalible in "+str(contriesstring) 
+#     print(mreponse)
