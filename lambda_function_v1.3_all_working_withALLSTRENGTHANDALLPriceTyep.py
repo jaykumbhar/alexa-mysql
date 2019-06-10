@@ -518,21 +518,25 @@ def RetuenPrice(Product_name, country_name, event, strengths, PriceTypes, availa
     numbercount = 0
     Mysenteces = [] 
     for pack in availabepacks:
-        numbercount +=1
         if strengths or PriceTypes:
-            if str(pack['strength']) == str(strengths) and str(pack['price_type']) == str(PriceTypes):
+            if str(pack['strength']) == str(strengths):
+                numbercount += 1
                 test = str(pack['description']) + ' Price For ' + str(pack['price_type']) + ' is ' + str(pack['price']) + ' ' + str(pack['currency'])
                 Mysenteces.append(test)
-            if str(strengths) == "all Strength" or str(strengths) == "all" and str(PriceTypes) == "all PriceTypes" or str(PriceTypes) == "all":
+            if str(strengths) == "all Strength" or str(strengths) == "all" :
+                numbercount += 1
                 test = str(pack['description']) + ' Price For ' + str(pack['price_type']) + ' is ' + str(pack['price']) + ' ' + str(pack['currency'])
                 Mysenteces.append(test)
-            if str(strengths) == "all Strength" or str(strengths) == "all" and str(pack['price_type']) == str(PriceTypes):
+            if str(pack['price_type']) == str(PriceTypes):
+                numbercount += 1
                 test = str(pack['description']) + ' Price For ' + str(pack['price_type']) + ' is ' + str(pack['price']) + ' ' + str(pack['currency'])
                 Mysenteces.append(test)
-            if str(PriceTypes) == "all PriceTypes" or str(PriceTypes) == "all" and str(pack['strength']) == str(strengths) :
+            if str(PriceTypes) == "all PriceTypes" or str(PriceTypes) == "all":
+                numbercount += 1
                 test = str(pack['description']) + ' Price For ' + str(pack['price_type']) + ' is ' + str(pack['price']) + ' ' + str(pack['currency'])
                 Mysenteces.append(test)
         else:
+            numbercount += 1
             test = str(pack['description']) + ' Price For ' + str(pack['price_type']) + ' is ' + str(pack['price']) + ' ' + str(pack['currency'])
             Mysenteces.append(test)
 

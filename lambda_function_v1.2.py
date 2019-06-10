@@ -160,24 +160,34 @@ def getProductCountryWiseDetailsPrice(Product_name,country_name,event):
     ResponseDataJson = json.loads(ResponseData.read())
     availabepacks = ResponseDataJson['data']['information']['availabepacks']
     numbercount = 0
+    packcount =0 
     Mysenteces = []
     for pack in availabepacks:
-        test = ''+str(numbercount) +'. '+str(pack['description'])+' Price For '+str(pack['price_type'])+' is '+str(pack['price'])+' '+str(pack['currency'])
-        Mysenteces.append(test)
-        numbercount += 1
+        if len(availabepacks)>1:
+            packcount +=1
+        else:
+            test = ''+str(numbercount) +'. '+str(pack['description'])+' Price For '+str(pack['price_type'])+' is '+str(pack['price'])+' '+str(pack['currency'])
+            Mysenteces.append(test)
+            numbercount += 1
     checkPrice = ', '.join(map(str, Mysenteces))
-    myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(country_name) + " is available in following packs :" + str(checkPrice)#+str(event['session']['attributes'])
+    if packcount > 1:
+        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(country_name) + " " + str(packcount)+ " Packs are availble Do You want to chek all packs or check a specific pack ? For all packs say Allpacks and For a specific pack give me a pack name or strength of pack so I can tell you the available specific packs."  #+str(event['session']['attributes'])
+        mtattribute = event['session']
+        if 'attributes' in event['session']:
+            packdatacheck = {'country':country_name,'product':Product_name}
+            if 'packdatacheck' in event['session']['attributes']:
+                event['session']['attributes']['packdatacheck'] = packdatacheck
+            else:
+                event['session']['attributes']['packdatacheck'] = packdatacheck
+                mtattribute = event['session']['attributes']
+    else:
+        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(country_name) + " is available in following pack :" + str(checkPrice)#+str(event['session']['attributes'])
+        mtattribute = event['session']['attributes'] = {'test':'removed'}
+
     reprompt_MSG = "Do you want to hear more about a particular Product?"
     card_TEXT = "You've picked " + str(Product_name .lower())
     card_TITLE = "You've picked " + str(Product_name .lower())
-    # mtattribute = event['session']
-    # if 'attributes' in event['session']:
-    #     if 'Country' in event['session']['attributes']:
-    #         del event['session']['attributes']['Country']
-    #     if 'Product' in event['session']['attributes']:
-    #         del event['session']['attributes']['Product']
-
-    mtattribute = event['session']['attributes'] = {'test':'removed'}
+    
     return output_json_builder_with_reprompt_and_card(myreponse, card_TEXT, card_TITLE,reprompt_MSG, False,mtattribute)
   
 def GetAllProductInformationWithinCountry(event):
