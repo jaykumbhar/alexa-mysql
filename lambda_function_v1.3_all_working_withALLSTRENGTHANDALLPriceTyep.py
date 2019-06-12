@@ -860,11 +860,14 @@ def getOnlyRegionsData(event):
             Product = mytestSession['Product']
             return getProductResionWiseDetailsPrice(Product, region_name, event)
         else:
-            mytestSession["Region"] = region_name
+            # mytestSession["Region"] = region_name
+            mytestSession = event['session']['attributes'].update({'Region':region_name})
+
     else:
-        mytestSession = {}
-        mytestSession["Region"] = region_name
-        event['session']['attributes'] = mytestSession
+        mytestSession = {'packdatacheck': {'product': Product_name},'Region':region_name}
+        # mytestSession = {}
+        # mytestSession["Region"] = region_name
+        # event['session']['attributes'] = mytestSession
 
     availabepacks = ResponseDataJson['data']['information']
     countrycount = availabepacks['countrycount']
@@ -875,6 +878,7 @@ def getOnlyRegionsData(event):
     reprompt_MSG = "Do You want to check for All Countries information or specific Countries information ?"
     card_TEXT = "You've picked " + str(region_name.lower())
     card_TITLE = "You've picked " + str(region_name.lower())
+
     return output_json_builder_with_reprompt_and_card(mreponse, card_TEXT, card_TITLE, reprompt_MSG, False,
                                                       mytestSession)
 
