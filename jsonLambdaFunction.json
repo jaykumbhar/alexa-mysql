@@ -1,0 +1,1112 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "demo medicine price check",
+            "intents": [
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": [
+                        "skill can't help you with that."
+                    ]
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": [
+                        "cancel"
+                    ]
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": [
+                        "Help"
+                    ]
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": [
+                        "please stop this",
+                        "stop"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": [
+                        "go to home"
+                    ]
+                },
+                {
+                    "name": "productcheck",
+                    "slots": [
+                        {
+                            "name": "products",
+                            "type": "products"
+                        },
+                        {
+                            "name": "countries",
+                            "type": "countries"
+                        },
+                        {
+                            "name": "regions",
+                            "type": "regions"
+                        }
+                    ],
+                    "samples": [
+                        "Tell me {products} price in {regions}",
+                        "{products} in {regions}",
+                        "What is {products} price in {regions}",
+                        "Yes what is {products} price in {countries}",
+                        "Yes I want to know {products} price in {countries}",
+                        "what is {products} price in {countries}",
+                        "{products} price in {countries}",
+                        "{products} in {countries}",
+                        "I want to know {products} price in {countries}",
+                        "give me an information of {products} with price in {countries}",
+                        "Please tell me {products} price in {countries}"
+                    ]
+                },
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": [
+                        "yes I want to know about this product",
+                        "yes I want to know",
+                        "yes"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NoIntent",
+                    "samples": [
+                        "dont do this",
+                        "i know all information ",
+                        "not yet",
+                        "not yet now",
+                        "No",
+                        "Currently no"
+                    ]
+                },
+                {
+                    "name": "onlyProduct",
+                    "slots": [
+                        {
+                            "name": "products",
+                            "type": "products"
+                        }
+                    ],
+                    "samples": [
+                        "what is price of {products}",
+                        "please tell me about {products}",
+                        "do you know {products}",
+                        "I want to know about {products} product",
+                        "{products}"
+                    ]
+                },
+                {
+                    "name": "onlyCountry",
+                    "slots": [
+                        {
+                            "name": "countries",
+                            "type": "countries"
+                        }
+                    ],
+                    "samples": [
+                        "I want know  {countries} Products",
+                        "I want know  {countries} country Products",
+                        "{countries} products",
+                        "how many medical products are available in {countries}",
+                        "I want know medicines available in {countries}",
+                        " {countries}"
+                    ]
+                },
+                {
+                    "name": "ProductForAllCountries",
+                    "slots": [
+                        {
+                            "name": "country",
+                            "type": "allcountry"
+                        }
+                    ],
+                    "samples": [
+                        "{country}",
+                        "I want to know all {country} Products",
+                        "all {country}"
+                    ]
+                },
+                {
+                    "name": "CountryWiseAllProducts",
+                    "slots": [
+                        {
+                            "name": "product",
+                            "type": "allproduct"
+                        }
+                    ],
+                    "samples": [
+                        "what is {product}",
+                        "{product} information",
+                        "I want to know about {product}",
+                        "{product}"
+                    ]
+                },
+                {
+                    "name": "onlyRegions",
+                    "slots": [
+                        {
+                            "name": "regions",
+                            "type": "regions"
+                        },
+                        {
+                            "name": "products",
+                            "type": "products"
+                        }
+                    ],
+                    "samples": [
+                        "I want to know {products}  in  {regions}",
+                        "I want to check {products}  in  {regions} ",
+                        "I want to know {regions} countries",
+                        "I want to know {regions} products",
+                        "{regions}"
+                    ]
+                },
+                {
+                    "name": "PacksCheck",
+                    "slots": [
+                        {
+                            "name": "strength",
+                            "type": "strengths"
+                        },
+                        {
+                            "name": "pricetypes",
+                            "type": "PriceTypes"
+                        }
+                    ],
+                    "samples": [
+                        "I want to know all availabe packs",
+                        "strength {strength}",
+                        "{strength} strengths ",
+                        "{strength} strengths packs",
+                        "{strength} MCG",
+                        "{strength} MG",
+                        "{pricetypes} Price packs",
+                        "{pricetypes} packs",
+                        "{pricetypes}",
+                        "I want to check {pricetypes} price type packs",
+                        "I want to check {strength} strengths packs",
+                        "all packs"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "products",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "CIPLA",
+                                "synonyms": [
+                                    "cipla"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "EBIXA",
+                                "synonyms": [
+                                    "ebix",
+                                    "ebixa",
+                                    "ebiza"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "AUBAGIO"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "AVONEX",
+                                "synonyms": [
+                                    "avox",
+                                    "avonex"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BENEPALI",
+                                "synonyms": [
+                                    "beneficiary",
+                                    "beneficiary",
+                                    "bennapali",
+                                    "benpali",
+                                    "benapali",
+                                    "BENEPALI"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ALOGLIPTIN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ALOGLIPTIN + METFORMIN",
+                                "synonyms": [
+                                    "ALOGLIPTIN with METFORMIN",
+                                    "ALOGLIPTIN and METFORMIN",
+                                    "ALOGLIPTIN PLUS METFORMIN"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ALOGLIPTIN + PIOGLITAZONE",
+                                "synonyms": [
+                                    "ALOGLIPTIN with PIOGLITAZONE",
+                                    "ALOGLIPTIN PLUS PIOGLITAZONE\t",
+                                    "ALOGLIPTIN PLUS\\ PIOGLITAZONE"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "AZILSARTAN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "AZILSARTAN + CHLORTHALIDONE",
+                                "synonyms": [
+                                    "AZILSARTAN PLUS CHLORTHALIDONE"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BRENTUXIMAB"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CALCIUM"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CALCIUM + D3",
+                                "synonyms": [
+                                    "CALCIUM with D3",
+                                    "CALCIUM plus D3"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CANDESARTAN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CANDESARTAN + AMLODIPINE",
+                                "synonyms": [
+                                    "CANDESARTAN with AMLODIPINE",
+                                    "CANDESARTAN and AMLODIPINE",
+                                    "CANDESARTAN plus AMLODIPINE"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "DEXLANSOPRAZOLE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "FENTANYL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "FENTANYL SPRAY"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "FIBRINOGEN THROMBIN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LANSOPRAZOLE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LEUPRORELIN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LORNOXICAM"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MIFAMURTIDE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PANTOPRAZOLE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PIOGLITAZONE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PIOGLITAZONE + GLIMEPIRIDE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PIOGLITAZONE + METFORMIN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "VEDOLIZUMAB"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "countries",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "MEXICO",
+                                "synonyms": [
+                                    "MEXICO"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SOUTH KOREA",
+                                "synonyms": [
+                                    "KOREA",
+                                    "SOUTH KOREA"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BRAZIL",
+                                "synonyms": [
+                                    "BRAZIL"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "AUSTRALIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ECUADOR"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HONG KONG"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "THAILAND"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CANADA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "QUEBEC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "IRAN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LIBYA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SPAIN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PORTUGAL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "AUSTRIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BELGIUM"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BOSNIA AND HERZEGOVINA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CZECH REPUBLIC"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "DENMARK"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "FINLAND"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "GEORGIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "GREECE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HUNGARY"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ITALY"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "KUWAIT"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LATVIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LUXEMBOURG"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "NORWAY"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "QATAR"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "RUSSIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SAUDI ARABIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SLOVAKIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SWEDEN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SWITZERLAND"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "UNITED ARAB EMIRATES"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "UNITED KINGDOM"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BULGARIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CROATIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "IRAQ"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LEBANON"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SERBIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BAHRAIN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "TURKEY"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ALGERIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MOROCCO"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "YEMEN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "EGYPT"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "JAPAN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SOUTH AFRICA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "GERMANY"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "IRELAND"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ROMANIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ARMENIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "BELARUS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "KAZAKHSTAN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "OMAN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PHILIPPINES"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "UKRAINE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ARGENTINA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "COLOMBIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ESTONIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "FRANCE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ISRAEL"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LITHUANIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MALAYSIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "NETHERLANDS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PERU"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SINGAPORE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "SLOVENIA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "TAIWAN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "LIECHTENSTEIN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "AZERBAIJAN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "UZBEKISTAN"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "POLAND"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ICELAND"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "MOLDOVA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "VENEZUELA"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "VIETNAM"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "CYPRUS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "JORDAN"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "allcountry",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "total"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "all countries",
+                                "synonyms": [
+                                    "Product in all countries",
+                                    "With all countries",
+                                    "for all countries",
+                                    "I want to check all countries data",
+                                    "all countries",
+                                    "all countries data"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "allproduct",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "all products within country"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "total products"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "all products"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "regions",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "EM",
+                                "synonyms": [
+                                    "Mediterranean region",
+                                    "eastern",
+                                    "eastern Mediterranean",
+                                    "Maybe you were looking for one of these terms? eastern jackrabbit",
+                                    "eastern kingbird",
+                                    "eastern lowland gorilla",
+                                    "eastern malayo-polynesian",
+                                    "eastern meadowlark",
+                                    "eastern narrow-mouthed toad",
+                                    "eastern orthodox",
+                                    "eastern orthodox church",
+                                    "eastern orthodoxy",
+                                    "eastern pasque"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Eucan",
+                                "synonyms": [
+                                    "Eurasia",
+                                    "Eurasian",
+                                    "Europe",
+                                    "Canadian",
+                                    "canada",
+                                    "canadians",
+                                    "canadien",
+                                    "canadienne",
+                                    "canadiennes",
+                                    "canadiens",
+                                    "canada-based",
+                                    "canadian-based",
+                                    "domestic",
+                                    "canadian-owned"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "Japan",
+                                "synonyms": [
+                                    "japan",
+                                    "Japanese Empire",
+                                    "the Island Kingdom",
+                                    "Zipangu",
+                                    "Yamato",
+                                    "Nihon",
+                                    "Dai Nihon",
+                                    "Great Nihon",
+                                    "Nippon",
+                                    "the Land of the Rising Sun",
+                                    "the Flowery Kingdom",
+                                    "the Land of Cherry Blossoms"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "strengths",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "12.5",
+                                "synonyms": [
+                                    "12 point 5"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "25"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "6.25",
+                                "synonyms": [
+                                    "6 point 25",
+                                    "6 point 5"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "10"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "20"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "40"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "80"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "50"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "1000"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "500"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "16"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "32"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "4"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "8"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "2"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "12"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "30"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "60"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "100"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "75"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "200"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "22.8"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "11.52"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "3.75"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "1"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "15"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "1.88"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "11.25"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "22.5"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "45"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "300"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "PriceTypes",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "PSP"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "NET WPP"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HOS"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "OTHER PRICE"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "HOS-Non Visible"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "PPP"
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "WPP"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
