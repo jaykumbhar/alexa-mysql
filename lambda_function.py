@@ -42,7 +42,7 @@ def intent_scheme(event):
     if intent_name == "productcheck":
         return get_Product(event)
     elif intent_name == "PacksCheck":
-        return get_PacksData(event)
+        return get_PacksData(event,False)
     elif intent_name == "onlyProduct":
         return getOnlyProductData(event)
     elif intent_name == "ProductForAllCountries":
@@ -100,6 +100,7 @@ def getTestingProduct(event):
 
 
 def get_Product(event):
+    print " I am Inside get_Product"
     mtattribute = False
     if 'value' in event['request']['intent']['slots']['products'] and \
             event['request']['intent']['slots']['products']['resolutions']['resolutionsPerAuthority'][0]['status'][
@@ -117,9 +118,15 @@ def get_Product(event):
                                                           False)
     if 'value' in event['request']['intent']['slots']['countries'] and event['request']['intent']['slots']['countries']['resolutions']['resolutionsPerAuthority'][0]['status']['code'] == 'ER_SUCCESS_MATCH':
         country_name = event['request']['intent']['slots']['countries']['resolutions']['resolutionsPerAuthority'][0]['values'][0]['value']['name']
+        mtattribute['packdatacheck'].update({'country': country_name})
+        mtattribute.update({'Country': country_name})
+
     elif 'value' in (event['request']['intent']['slots']['regions']) or 'resolutions' in event['request']['intent']['slots']['regions']:
         regions_name = event['request']['intent']['slots']['regions']['resolutions']['resolutionsPerAuthority'][0]['values'][0]['value']['name']
         if regions_name:
+            mtattribute.update({'regions':regions_name})
+            mtattribute['packdatacheck'].update({'regions': regions_name})
+            event['session']['attributes']= mtattribute
             return getProductResionWiseDetailsPrice(Product_name, regions_name, event)
     else:
         wrongname_MSG = "Sorry as per requested country or Resion is not availble, Please Give me a Country Name Or Resion name "
@@ -128,6 +135,21 @@ def get_Product(event):
         card_TITLE = "Wrong product."
         return output_json_builder_with_reprompt_and_card(wrongname_MSG, card_TEXT, card_TITLE, reprompt_MSG, False,
                                                           mtattribute)
+    mtattribute = {'packdatacheck': {'product': Product_name,'country': country_name},'Product': Product_name,'Country': country_name}
+
+    if 'value' in (event['request']['intent']['slots']['strength']) or 'resolutions' in event['request']['intent']['slots']['strength']:
+        if event['request']['intent']['slots']['strength']['resolutions']['resolutionsPerAuthority'][0]['status']['code'] == 'ER_SUCCESS_MATCH':
+            strengths_name = event['request']['intent']['slots']['strength']['resolutions']['resolutionsPerAuthority'][0]['values'][0]['value']['name']
+            mtattribute = {'packdatacheck': {'product': Product_name,'country': country_name,'strength':strengths_name},'Product': Product_name,'Country': country_name}
+            event['session']['attributes'] = mtattribute
+            return get_PacksData(event,mtattribute)
+        else:
+            wrongname_MSG = "Sorry as per requested product with country Strength is not availble, Please Give me a proper Strength Name "
+            reprompt_MSG = "Please give me country name ?"
+            card_TEXT = "Use the full form."
+            card_TITLE = "Wrong product."
+            return output_json_builder_with_reprompt_and_card(wrongname_MSG, card_TEXT, card_TITLE, reprompt_MSG, False,
+                                                              mtattribute)
     return getProductCountryWiseDetailsPrice(Product_name, country_name, event)
 
 
@@ -242,7 +264,6 @@ def getOnlyCountryData(event):
         event['session']['attributes'].update({'Country': country_name})
         mtattribute = event['session']['attributes']
 
-
     mreponse = 'As per Your requested ' + str(country_name) + ' ' + str(len(
         product_count)) + " products are availble . DO You want to check for AllProducts information or specific Product information ?"
     reprompt_MSG = "Do you want to hear more about AllProducts OR a particular Product ?"
@@ -255,18 +276,28 @@ def getOnlyCountryData(event):
 
 """ This is Demo """
 
-def get_PacksData(event):
-    print "I am In get_PacksData "
-    strengths = False
-    PriceTypes = False
-    Product_name = None
-    country_name = None
+def get_PacksData(event,mtattribute):
+    if mtattribute:
+        print "I am in Get pack data with Strength"
+        if event['session']:
+            print mtattribute
+            event['session']['attributes'] = mtattribute
+    else:
+        print "I am In get_PacksData "
+        strengths = False
+        PriceTypes = False
+        Product_name = None
+        country_name = None
+
     try:
         if 'value' in event['request']['intent']['slots']['strength'] and event['request']['intent']['slots']['strength']['resolutions']['resolutionsPerAuthority'][0]['status']['code'] == 'ER_SUCCESS_MATCH':
             strengths = event['request']['intent']['slots']['strength']['resolutions']['resolutionsPerAuthority'][0]['values'][0]['value']['name']
+            
     except Exception as e:
         print e
         strengths = False
+        if 'strength' in event['session']['attributes']['packdatacheck']:
+            del event['session']['attributes']['packdatacheck']['strength']
         print "strength not Found"
         pass
     try:
@@ -276,6 +307,8 @@ def get_PacksData(event):
     except Exception as e:
         print e
         PriceTypes = False
+        if 'pricetypes' in event['session']['attributes']['packdatacheck']:
+            del event['session']['attributes']['packdatacheck']['pricetypes']
         print "pricetypes not Found"
         pass
     if 'attributes' in event['session']:
@@ -284,9 +317,9 @@ def get_PacksData(event):
             country_name = packdatacheck.get('country', None)
             Product_name = packdatacheck.get('product', None)
             if strengths:
-                mtattribute = event['session']['attributes']['packdatacheck'].update({'strength': strengths})
+                event['session']['attributes']['packdatacheck'].update({'strength': strengths})
             if PriceTypes:
-                mtattribute = event['session']['attributes']['packdatacheck'].update({'pricetypes': PriceTypes})
+                event['session']['attributes']['packdatacheck'].update({'pricetypes': PriceTypes})
 
             try:
                 Product_name = urllib2.quote(Product_name)
@@ -304,9 +337,10 @@ def get_PacksData(event):
                                                                   False, False)
             ResponseDataJson = json.loads(ResponseData.read())
             availabepacks = ResponseDataJson['data']['information']['availabepacks']
-            if 'strength' not in event['session']['attributes']['packdatacheck']:
+            # if 'strength' not in event['session']['attributes']['packdatacheck']:
+            if 'strengthCheck' not in event['session']['attributes']:
                 print "goto Before Strength"
-                mtattribute = event['session']['attributes']['packdatacheck']
+                mtattribute = event['session']['attributes']
                 return BeforeStrength(Product_name, country_name, event, availabepacks,mtattribute)
             elif 'pricetypes' not in event['session']['attributes']['packdatacheck']:
                 print "goto Before PriceType"
@@ -318,16 +352,18 @@ def get_PacksData(event):
                 pricetypes = event['session']['attributes']['packdatacheck']['pricetypes']
                 return RetuenPrice(Product_name, country_name, event, strength, pricetypes, availabepacks)
         else:
-            myreponse = "Please Choose A Region, country and Product  \n So I Can Find A Pack For You"  # +str(event['session']['attributes'])
+            myreponse = "Sorry I didn't get, Please Choose A Region, country and Product  \n So I Can Find A Pack For You"  # +str(event['session']['attributes'])
             reprompt_MSG = "Wnat Do you want ?"
             card_TEXT = "Choose A Region, country and Product "
             card_TITLE = "Choose A Region, country and Product "
-            mtattribute = event['session']['attributes']['packdatacheck'] = False
+            event['session']['attributes']['packdatacheck'] = False
+            mtattribute = event['session']['attributes']
             # mtattribute.update(event['session']['attributes'])
-        return output_json_builder_with_reprompt_and_card(myreponse, card_TEXT, card_TITLE, reprompt_MSG, False,
+            return output_json_builder_with_reprompt_and_card(myreponse, card_TEXT, card_TITLE, reprompt_MSG, False,
                                                           mtattribute)
     else:
-        myreponse = "I didn't understand the Product  Please repeate once"  # +str(event['session']['attributes'])
+        # myreponse = "I didn't understand the Product   Please repeate once"  # +str(event['session']['attributes'])
+        myreponse = "I don't have that much information Please go through another country or  Product "  # +str(event['session']['attributes'])
         reprompt_MSG = "Wnat Do you want ?"
         card_TEXT = "Choose A Region, country and Product "
         card_TITLE = "Choose A Region, country and Product "
@@ -337,7 +373,17 @@ def get_PacksData(event):
 
 def BeforeStrength(Product_name, country_name, event, availabepacks,mtattribute):
     print "I am in BeforeStrength" 
-    print event['session']
+    strengths = False
+    try:
+        if 'value' in event['request']['intent']['slots']['strength'] and event['request']['intent']['slots']['strength']['resolutions']['resolutionsPerAuthority'][0]['status']['code'] == 'ER_SUCCESS_MATCH':
+            strengths = event['request']['intent']['slots']['strength']['resolutions']['resolutionsPerAuthority'][0]['values'][0]['value']['name']
+            print "Strengths Found",strengths
+    except Exception as e:
+        print e
+        print "strength not Found"
+        pass
+    print mtattribute
+  
     numbercount = 0
     teststrength = []
     Mysenteces = []
@@ -347,11 +393,26 @@ def BeforeStrength(Product_name, country_name, event, availabepacks,mtattribute)
         teststrength.append(pack['strength'])
         msgteststrength.append(pack['strength']+' '+pack['strengthUnit'])
 
-    mdata = [s.lower() for s in teststrength]
+    mdata = [s.lower() for s in msgteststrength]
     strength_count = set(mdata)
     unique_data = list(strength_count)
-    if len(unique_data) == 0:
-        myreponse = "As per Your requested Product " + str(Product_name) + " in " + str(country_name) + " Strengths are Not available" + " DO You want to check More information So Say Any Product Name and Country name"
+    if strengths:
+        if strengths in teststrength:
+            if 'strengthCheck' in mtattribute:
+                print "Before Detetion mtattribute"
+                del mtattribute['strengthCheck']
+                print "ag=fter Detetion mtattribute"
+            event['session']['attributes'].update(mtattribute)
+            return BeforePriceType(Product_name, country_name, event, availabepacks,mtattribute)
+        else:
+            mymsg = ', '.join(map(str, unique_data))
+            if len(unique_data)>1:
+                myreponse = "As per Your requested Product " + str(Product_name) + " in " + str(country_name) + " Strength is Not available, Avalible Strengths are  as Follows : "+str(mymsg) 
+            else:
+                myreponse = "As per Your requested Product " + str(Product_name) + " in " + str(country_name) + " Strength is not available,  Avalible Strength as follows : "+str(mymsg) 
+            mtattribute.update({'strengthCheck':True})
+    elif len(unique_data) == 0:
+        myreponse = "As per Your requested Product " + str(Product_name) + " in " + str(country_name) + " Strengths are Not available"
     elif len(unique_data)==1:
         mdata = [s.lower() for s in msgteststrength]
         strength_count = set(mdata)
@@ -363,8 +424,11 @@ def BeforeStrength(Product_name, country_name, event, availabepacks,mtattribute)
     reprompt_MSG = "Do you want to hear more about a particular Product?"
     card_TEXT = "You've picked " + str(Product_name.lower())
     card_TITLE = "You've picked " + str(Product_name.lower())
+    
+    print mtattribute
+    # event['session']['attributes'] = mtattribute.update('strengthCheck':True)
     return output_json_builder_with_reprompt_and_card(myreponse, card_TEXT, card_TITLE, reprompt_MSG, False,
-                                                      False)
+                                                      mtattribute)
 def DetailsStrength(Product_name, country_name, event, availabepacks,mtattribute):
     print "I am in DetailsStrength" 
     numbercount = 0
@@ -386,7 +450,7 @@ def DetailsStrength(Product_name, country_name, event, availabepacks,mtattribute
     reprompt_MSG = "Do you want to hear more about a particular strength or all strengths?"
     card_TEXT = "You've picked " + str(Product_name.lower())
     card_TITLE = "You've picked " + str(Product_name.lower())
-    mtattribute = event['session']['attributes']['packdatacheck'].update({'strengthForAllCheck':True })
+    event['session']['attributes']['packdatacheck'].update({'strengthForAllCheck':True })
     mtattribute = event['session']['attributes']
     # print event['session']['attributes']['packdatacheck']
     return output_json_builder_with_reprompt_and_card(myreponse, card_TEXT, card_TITLE, reprompt_MSG, False,
@@ -585,7 +649,8 @@ def getProductCountryWiseDetailsPrice(Product_name, country_name, event):
         strgnthandpricetype = None
         if len(list(Myprice_type_list_unnique)) > 0 and len(list(Mystrength_list_unnique)) > 0:
             strgnthandpricetype = str(len(list(Mystrength_list_unnique)))+" strengths are available Do You want to check all strengths or a specific strength"# + +''# + ' and Avalible PriceTypes = ' + Myprice_type_list_commaSeprated
-        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(country_name) + " " + str(packcount) + " Packs are availble !\n Do You want to check all packs information or check for a specific pack ?"# \n Say all Packs , Say strength Of Medicine For example 100 MG \n or Say Price Type So I Can Give you a Filtred Result" + str(strgnthandpricetype)
+        # else:
+        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(country_name) + " " + str(strgnthandpricetype) #+ " Packs are availble !\n Do You want to check all packs or check for a specific pack ?"# \n Say all Packs , Say strength Of Medicine For example 100 MG \n or Say Price Type So I Can Give you a Filtred Result" + str(strgnthandpricetype)
         # reprompt_MSG = "Do You want to chek all packs or check a specific pack ? For all packs say Allpacks and For a specific pack give me a pack name or strength of pack so I can tell you the available specific packs."
         reprompt_MSG = "Do You want to check all strengths or a specific strength"
         mtattribute = {'packdatacheck': {'country': country_name, 'product': Product_name},'Product': Product_name, 'Country': country_name}
@@ -650,18 +715,11 @@ def getProductResionWiseDetailsPrice(Product_name, region_name, event):
             region_name) + " are availble in  " + str(len(unique_data)) + ' Countries with' + str(
             packcount) + " Packs! \n Do You want to chek all Countries data Or specific Country Data "  # +str(event['session']['attributes'])
         reprompt_MSG = "Do You want to chek for all Countries or check  for a specific Countries ? For all Countries say AllCountries and For a specific Countries give me a Country name "
-        # print(event['session']['attributes'])
         if 'packdatacheck' in event['session']['attributes']:
             event['session']['attributes']['packdatacheck'].update({'region':region_name})
             mtattribute = event['session']['attributes']
-            # mtattribute
-            # mtattribute = {'packdatacheck': c,'product':Product_name}}
-        # else:
-            # event['session']['attributes']['packdatacheck'] = 
     else:
-        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(
-            region_name) + " is available in following pack :" + str(
-            checkPrice + " DO You want to check More information So Say Any Product Name and Country name")  # +str(event['session']['attributes'])
+        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(region_name) + " is available in following pack :" + str(checkPrice + " DO You want to check More information So Say Any Product Name and Country name")  # +str(event['session']['attributes'])
         mtattribute = {'Product': False, 'region': False}
         mtattribute.update(event['session']['attributes'])
         reprompt_MSG = "Do you want to hear more about a particular Country?"
@@ -812,47 +870,9 @@ def GetAllCountryInformationWithinProduct(event):
                                                           False)
 
 
-# def getOnlyRegionsData(event):
-#     if 'value' in event['request']['intent']['slots']['regions'] and event['request']['intent']['slots']['regions']['resolutions']['resolutionsPerAuthority'][0]['status']['code'] == 'ER_SUCCESS_MATCH':
-#         region_name = event['request']['intent']['slots']['regions']['resolutions']['resolutionsPerAuthority'][0]['values'][0]['value']['name']
-#     else:    
-#         myreponse = "I didn't understand, Will You Please repeate once"  # +str(event['session']['attributes'])
-#         reprompt_MSG = "Wnat Do you want ?"
-#         card_TEXT = "Medicine Strength"
-#         card_TITLE = "Medicine Strength"
-#         return output_json_builder_with_reprompt_and_card(myreponse, card_TEXT, card_TITLE, reprompt_MSG, False, False)
-
-#     ResponseDataJson = SendResionDataReq(region_name)
-#     if 'attributes' in event['session']:
-#         mytestSession = event['session']['attributes']
-#         if 'Product' in mytestSession:
-#             Product = mytestSession['Product']
-#             return getProductResionWiseDetailsPrice(Product, region_name, event)
-#         else:
-#             mytestSession["Region"] = region_name
-#     else:
-#         mytestSession = {}
-#         mytestSession["Region"] = region_name
-#         event['session']['attributes'] = mytestSession
-
-#     availabepacks = ResponseDataJson['data']['information']
-#     countrycount = availabepacks['countrycount']
-#     availabepacks_count = availabepacks['availabepacks']
-#     mreponse = 'As per Your requested ' + str(region_name) + ' ' + str(
-#         availabepacks_count) + ' Packs are availble in ' + str(
-#         countrycount) + " countries. DO You want to check for All Countries information or specific Countries information ?"
-#     reprompt_MSG = "Do You want to check for All Countries information or specific Countries information ?"
-#     card_TEXT = "You've picked " + str(region_name.lower())
-#     card_TITLE = "You've picked " + str(region_name.lower())
-#     return output_json_builder_with_reprompt_and_card(mreponse, card_TEXT, card_TITLE, reprompt_MSG, False,
-#                                                       mytestSession)
-
-
-
-
 def getOnlyRegionsData(event):
     print " i am ain getOnlyRegionsData"
-    if 'resolutions' in event['request']['intent']['slots']['regions']:
+    if 'resolutions' in event['request']['intent']['slots']['regions'] and event['request']['intent']['slots']['regions']['resolutions']['resolutionsPerAuthority'][0]['status']['code'] == 'ER_SUCCESS_MATCH':
         region_name = event['request']['intent']['slots']['regions']['resolutions']['resolutionsPerAuthority'][0]['values'][0]['value']['name']
     else:
         myreponse = "I didn't understand, Will You Please repeate once"  # +str(event['session']['attributes'])
