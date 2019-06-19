@@ -48,9 +48,20 @@
                         {
                             "name": "regions",
                             "type": "regions"
+                        },
+                        {
+                            "name": "strength",
+                            "type": "strengths"
                         }
                     ],
                     "samples": [
+                        "i want to know {products} price in {countries} with {strength} ",
+                        "i want to know {products} price in {countries} with {strength} strength",
+                        "tell me {products} price in {countries} with {strength} MG strengths",
+                        "i want to know about {products} in {regions}",
+                        "i want to know about {products} in {countries}",
+                        "i want to know about {products} ",
+                        "i want to know more information about {products}",
                         "Tell me {products} price in {regions}",
                         "{products} in {regions}",
                         "What is {products} price in {regions}",
@@ -92,6 +103,8 @@
                         }
                     ],
                     "samples": [
+                        "I want check {products} info",
+                        "I want check {products} ",
                         "what is price of {products}",
                         "please tell me about {products}",
                         "do you know {products}",
@@ -108,12 +121,13 @@
                         }
                     ],
                     "samples": [
-                        "I want know  {countries} Products",
+                        "i want to know argentina {countries}  product",
+                        "{countries} country",
                         "I want know  {countries} country Products",
                         "{countries} products",
                         "how many medical products are available in {countries}",
                         "I want know medicines available in {countries}",
-                        " {countries}"
+                        "{countries}"
                     ]
                 },
                 {
@@ -178,6 +192,11 @@
                         }
                     ],
                     "samples": [
+                        "{strength}  ",
+                        "{strength} strength",
+                        "{pricetypes} pricetype",
+                        "{pricetypes} price",
+                        "{pricetypes} price types",
                         "I want to know all availabe packs",
                         "strength {strength}",
                         "{strength} strengths ",
@@ -190,6 +209,26 @@
                         "I want to check {pricetypes} price type packs",
                         "I want to check {strength} strengths packs",
                         "all packs"
+                    ]
+                },
+                {
+                    "name": "GetProductInformation",
+                    "slots": [],
+                    "samples": [
+                        "Could You please tell me Product names",
+                        "Could You please tell me Product information",
+                        "Could You please tell me Product list",
+                        "i dont know the products",
+                        "available Product names",
+                        "tell me some products name",
+                        "Will you please tell me some Prouct names",
+                        "demo example product list",
+                        "example products",
+                        "give me example products",
+                        "I don't know the product name",
+                        "What kind of products are availbe ",
+                        "I don't Know products",
+                        "Tell me a pack Information "
                     ]
                 }
             ],
@@ -287,7 +326,12 @@
                         },
                         {
                             "name": {
-                                "value": "CALCIUM"
+                                "value": "CALCIUM",
+                                "synonyms": [
+                                    "cancel",
+                                    "cancel",
+                                    "Calcium"
+                                ]
                             }
                         },
                         {
@@ -904,6 +948,37 @@
                     "values": [
                         {
                             "name": {
+                                "value": "all",
+                                "synonyms": [
+                                    "specific strength",
+                                    "specific strength data",
+                                    "on specific strength",
+                                    "specific strength",
+                                    "packs",
+                                    "allpacks",
+                                    "allpacks information",
+                                    "all packs Info",
+                                    "all packs information",
+                                    "all packs"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "all Strength",
+                                "synonyms": [
+                                    "one strengths",
+                                    "one strength",
+                                    "all strengths",
+                                    "all strength",
+                                    "all strengths",
+                                    "all",
+                                    "I want to check  all Strength"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
                                 "value": "12.5",
                                 "synonyms": [
                                     "12 point 5"
@@ -912,13 +987,17 @@
                         },
                         {
                             "name": {
-                                "value": "25"
+                                "value": "25",
+                                "synonyms": [
+                                    "25 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
                                 "value": "6.25",
                                 "synonyms": [
+                                    "6.5 milligrams",
                                     "6 point 25",
                                     "6 point 5"
                                 ]
@@ -926,102 +1005,163 @@
                         },
                         {
                             "name": {
-                                "value": "10"
+                                "value": "10",
+                                "synonyms": [
+                                    "10 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "20"
+                                "value": "20",
+                                "synonyms": [
+                                    "20 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "40"
+                                "value": "40",
+                                "synonyms": [
+                                    "40 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "80"
+                                "value": "80",
+                                "synonyms": [
+                                    "80 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "50"
+                                "value": "50",
+                                "synonyms": [
+                                    "50 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "1000"
+                                "value": "1000",
+                                "synonyms": [
+                                    "1000 mg",
+                                    "1000 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "500"
+                                "value": "500",
+                                "synonyms": [
+                                    "500 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "16"
+                                "value": "16",
+                                "synonyms": [
+                                    "16 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "32"
+                                "value": "32",
+                                "synonyms": [
+                                    "32 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "4"
+                                "value": "4",
+                                "synonyms": [
+                                    "4 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "8"
+                                "value": "8",
+                                "synonyms": [
+                                    "8 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "2"
+                                "value": "2",
+                                "synonyms": [
+                                    "2 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "12"
+                                "value": "12",
+                                "synonyms": [
+                                    "12 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "30"
+                                "value": "30",
+                                "synonyms": [
+                                    "30 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "60"
+                                "value": "60",
+                                "synonyms": [
+                                    "60 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "100"
+                                "value": "100",
+                                "synonyms": [
+                                    "100 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "75"
+                                "value": "75",
+                                "synonyms": [
+                                    "75 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "200"
+                                "value": "200",
+                                "synonyms": [
+                                    "200 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "22.8"
+                                "value": "22.8",
+                                "synonyms": [
+                                    "22.8 milligrams"
+                                ]
                             }
                         },
                         {
                             "name": {
-                                "value": "11.52"
+                                "value": "11.52",
+                                "synonyms": [
+                                    "11.52 milligrams"
+                                ]
                             }
                         },
                         {
@@ -1069,6 +1209,16 @@
                 {
                     "name": "PriceTypes",
                     "values": [
+                        {
+                            "name": {
+                                "value": "all PriceTypes",
+                                "synonyms": [
+                                    "all",
+                                    "I want know all PriceTypes",
+                                    "all PriceTypes"
+                                ]
+                            }
+                        },
                         {
                             "name": {
                                 "value": "PSP"

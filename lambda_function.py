@@ -7,7 +7,7 @@ BASEURL = 'http://3.89.184.128:6500/api/'
 # BASEURL = 'http://127.0.0.1:8000/api/'
 
 def lambda_handler(event, context):
-    event = event['payload']['content']['invocationRequest']['body']
+    # event = event['payload']['content']['invocationRequest']['body']
     if event['session']['new']:
         on_start()
     if event['request']['type'] == "LaunchRequest":
@@ -208,7 +208,7 @@ def getOnlyProductData(event):
     regions_numbers = list(unique_R_data)
     if len(regions_numbers) > 1:
         contriesstring = ' , '.join(map(str, regions_numbers))
-        mreponse = 'As per Your requested ' + str(numbercount) + ' packs of ' + str(Product_name) + " are availble in " + str(contriesstring) + ' Do You want to check  Product information for All Regions or specific regions ? Say All Regions or say a specific Resion Fox example... (Eastern)'
+        mreponse = 'As per Your requested ' + str(numbercount) + ' packs of ' + str(Product_name) + " are availble in " + str(contriesstring) + ' Do You want to check  Product information for specific regions ? Say a specific Region Name For example... (Eastern)'
     else:
         mreponse = 'As per Your requested ' + str(numbercount) + ' packs of ' + str(Product_name) + " are availble in " + str(regions_numbers[0]) + ' Region and within ' + str(regions_numbers[0]) + ' Product available on' + str(len(countries)) + ' countries Do You want to check for All For all Countries information or specific country information ? Say All Countries or say a specific Resion Fox example... (India)'
     reprompt_MSG = "Do you want to hear more about a particular Product?"
@@ -256,13 +256,20 @@ def getOnlyCountryData(event):
     product_count = set(product_calculate)
     unique_data = set(mdata)
     # mytestSession = {"Country": country_name}
-    if 'packdatacheck' in event['session']['attributes']:
-        event['session']['attributes']['packdatacheck'].update({'country': country_name})
-        event['session']['attributes'].update({'Country': country_name})
-        mtattribute = event['session']['attributes']
-    else:
-        event['session']['attributes'].update({'Country': country_name})
-        mtattribute = event['session']['attributes']
+    if event['session']:
+        if 'attributes' in event['session']:
+            if 'packdatacheck' in event['session']['attributes']:
+                event['session']['attributes']['packdatacheck'].update({'country': country_name})
+                event['session']['attributes'].update({'Country': country_name})
+                mtattribute = event['session']['attributes']
+            else:
+                event['session']['attributes']= {'Country': country_name}
+                event['session']['attributes']['packdatacheck'] = {'Country': country_name}
+                mtattribute = event['session']['attributes']
+        else:
+            event['session']['attributes'] =  {'Country': country_name}
+            event['session']['attributes']['packdatacheck'] = {'Country': country_name}
+            mtattribute = event['session']['attributes']
 
     mreponse = 'As per Your requested ' + str(country_name) + ' ' + str(len(
         product_count)) + " products are availble . DO You want to check for AllProducts information or specific Product information ?"
@@ -319,6 +326,7 @@ def get_PacksData(event,mtattribute):
             if strengths:
                 event['session']['attributes']['packdatacheck'].update({'strength': strengths})
             if PriceTypes:
+                event['session']['attributes'].update({'strengthCheck': True})
                 event['session']['attributes']['packdatacheck'].update({'pricetypes': PriceTypes})
 
             try:
@@ -382,7 +390,7 @@ def BeforeStrength(Product_name, country_name, event, availabepacks,mtattribute)
         print e
         print "strength not Found"
         pass
-    print mtattribute
+    # print mtattribute
   
     numbercount = 0
     teststrength = []
@@ -401,19 +409,19 @@ def BeforeStrength(Product_name, country_name, event, availabepacks,mtattribute)
             if 'strengthCheck' in mtattribute:
                 print "Before Detetion mtattribute"
                 del mtattribute['strengthCheck']
-                print "ag=fter Detetion mtattribute"
+                print "after Detetion mtattribute"
             event['session']['attributes'].update(mtattribute)
             return BeforePriceType(Product_name, country_name, event, availabepacks,mtattribute)
         else:
             mymsg = ', '.join(map(str, unique_data))
-            if len(unique_data)>1:
-                myreponse = "As per Your requested Product " + str(Product_name) + " in " + str(country_name) + " Strength is Not available, Avalible Strengths are  as Follows : "+str(mymsg) 
+            if len(unique_data) > 1 and str(strengths) not in  ["all","all strengths"]:
+                myreponse = "As per Your requested Product " + str(Product_name) + " in " + str(country_name) + " Strength is Not available, Avalible Strengths are  as Follows : "+str(mymsg) +" Please Choose One from thease or say all Strengths so I will Provide You the price types for the Strength "
             else:
-                myreponse = "As per Your requested Product " + str(Product_name) + " in " + str(country_name) + " Strength is not available,  Avalible Strength as follows : "+str(mymsg) 
+                myreponse = "As per Your requested Product " + str(Product_name) + " in " + str(country_name) + " Avalible Strength as follows : "+str(mymsg)+ "  Please Choose the Strength or say All Strengths so I will Provide You the price types for the Strength "
             mtattribute.update({'strengthCheck':True})
     elif len(unique_data) == 0:
         myreponse = "As per Your requested Product " + str(Product_name) + " in " + str(country_name) + " Strengths are Not available"
-    elif len(unique_data)==1:
+    elif len(unique_data) == 1:
         mdata = [s.lower() for s in msgteststrength]
         strength_count = set(mdata)
         unique_data = list(strength_count)
@@ -425,7 +433,7 @@ def BeforeStrength(Product_name, country_name, event, availabepacks,mtattribute)
     card_TEXT = "You've picked " + str(Product_name.lower())
     card_TITLE = "You've picked " + str(Product_name.lower())
     
-    print mtattribute
+    # print mtattribute
     # event['session']['attributes'] = mtattribute.update('strengthCheck':True)
     return output_json_builder_with_reprompt_and_card(myreponse, card_TEXT, card_TITLE, reprompt_MSG, False,
                                                       mtattribute)
@@ -612,12 +620,7 @@ def getProductCountryWiseDetailsPrice(Product_name, country_name, event):
         country_name = urllib2.unquote(country_name)
     except Exception as e:
         print e
-        wrongname_MSG = "Sorry This product is not availble as per request."
-        reprompt_MSG = "Do you want to hear more about a particular Product?"
-        card_TEXT = "Use the full form."
-        card_TITLE = "Wrong Product."
-        return output_json_builder_with_reprompt_and_card(wrongname_MSG, card_TEXT, card_TITLE, reprompt_MSG, False,
-                                                          False)
+        return SendAvailableProductInCountry(Product_name)
     ResponseDataJson = json.loads(ResponseData.read())
     availabepacks = ResponseDataJson['data']['information']['availabepacks']
     numbercount = 0
@@ -648,7 +651,10 @@ def getProductCountryWiseDetailsPrice(Product_name, country_name, event):
     if packcount > 1:
         strgnthandpricetype = None
         if len(list(Myprice_type_list_unnique)) > 0 and len(list(Mystrength_list_unnique)) > 0:
-            strgnthandpricetype = str(len(list(Mystrength_list_unnique)))+" strengths are available Do You want to check all strengths or a specific strength"# + +''# + ' and Avalible PriceTypes = ' + Myprice_type_list_commaSeprated
+            if len(list(Myprice_type_list_unnique))==1:
+                strgnthandpricetype = str(Mystrength_list_commaSeprated)+" strengths is available Do you Want to know the availble price types for this Strength then say, " + str(Mystrength_list_commaSeprated) 
+            else:
+                strgnthandpricetype = str(len(list(Mystrength_list_unnique)))+" strengths are available Do You want to check all strengths or a specific strength"# + +''# + ' and Avalible PriceTypes = ' + Myprice_type_list_commaSeprated
         # else:
         myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(country_name) + " " + str(strgnthandpricetype) #+ " Packs are availble !\n Do You want to check all packs or check for a specific pack ?"# \n Say all Packs , Say strength Of Medicine For example 100 MG \n or Say Price Type So I Can Give you a Filtred Result" + str(strgnthandpricetype)
         # reprompt_MSG = "Do You want to chek all packs or check a specific pack ? For all packs say Allpacks and For a specific pack give me a pack name or strength of pack so I can tell you the available specific packs."
@@ -712,7 +718,7 @@ def getProductResionWiseDetailsPrice(Product_name, region_name, event):
     # checkPrice = ', '.join(map(str, Mysenteces))
     if packcount > 1:
         myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(
-            region_name) + " are availble in  " + str(len(unique_data)) + ' Countries with' + str(
+            region_name) + " are availble in  " + str(len(unique_data)) + ' Countries with ' + str(
             packcount) + " Packs! \n Do You want to chek all Countries data Or specific Country Data "  # +str(event['session']['attributes'])
         reprompt_MSG = "Do You want to chek for all Countries or check  for a specific Countries ? For all Countries say AllCountries and For a specific Countries give me a Country name "
         if 'packdatacheck' in event['session']['attributes']:
@@ -747,8 +753,8 @@ def GetAllProductInformationWithinCountry(event):
                 reprompt_MSG = "Do you want to hear more about a particular Product?"
                 card_TEXT = "Use the full form."
                 card_TITLE = "Wrong Product."
-                return output_json_builder_with_reprompt_and_card(wrongname_MSG, card_TEXT, card_TITLE, reprompt_MSG,
-                                                                  False, False)
+                return output_json_builder_with_reprompt_and_card(wrongname_MSG, card_TEXT, card_TITLE, reprompt_MSG, False,False)
+                # return SendAvailableProductInCountry(Product_name)
             ResponseDataJson = json.loads(ResponseData.read())
             availabepacks = ResponseDataJson['data']['information']['availabepacks']
             numbercount = 0
@@ -780,7 +786,7 @@ def GetAllProductInformationWithinCountry(event):
                 mytestSession = event['session']['attributes']
                 if 'Product' in mytestSession:
                     Product = mytestSession['Product']
-                    return getProductCountrssyWiseDetailsPrice(Product, region_name, event)
+                    return getProductCountryWiseDetailsPrice(Product, region_name, event)
                 else:
                     mytestSession["Region"] = region_name
             else:
@@ -869,7 +875,6 @@ def GetAllCountryInformationWithinProduct(event):
         return output_json_builder_with_reprompt_and_card(wrongname_MSG, card_TEXT, card_TITLE, reprompt_MSG, False,
                                                           False)
 
-
 def getOnlyRegionsData(event):
     print " i am ain getOnlyRegionsData"
     if 'resolutions' in event['request']['intent']['slots']['regions'] and event['request']['intent']['slots']['regions']['resolutions']['resolutionsPerAuthority'][0]['status']['code'] == 'ER_SUCCESS_MATCH':
@@ -893,7 +898,7 @@ def getOnlyRegionsData(event):
             mytestSession = event['session']['attributes'].update({'Region':region_name})
 
     else:
-        mytestSession = {'packdatacheck': {'product': Product_name},'Region':region_name}
+        mytestSession = {'packdatacheck': {'region': region_name},'Region':region_name}
         # mytestSession = {}
         # mytestSession["Region"] = region_name
         # event['session']['attributes'] = mytestSession
@@ -901,7 +906,7 @@ def getOnlyRegionsData(event):
     availabepacks = ResponseDataJson['data']['information']
     countrycount = availabepacks['countrycount']
     availabepacks_count = availabepacks['availabepacks']
-    mreponse = 'As per Your requested ' + str(region_name) + ' ' + str(
+    mreponse = 'As per Your requested ' + str(region_name) + '  ' + str(
         availabepacks_count) + ' Packs are availble in ' + str(
         countrycount) + " countries. DO You want to check for All Countries information or specific Countries information ?"
     reprompt_MSG = "Do You want to check for All Countries information or specific Countries information ?"
@@ -949,6 +954,41 @@ def SendResionDataReq(region_name):
                                                           False)
     ResponseDataJson = json.loads(ResponseData.read())
     return ResponseDataJson
+
+def SendAvailableProductInCountry(Product_name):
+    try:
+        Product_name = urllib2.quote(Product_name)
+        url = str(BASEURL) + 'productlistcheck/' + str(Product_name)
+        print url
+        ResponseData = urllib2.urlopen(str(url))
+        Product_name = urllib2.unquote(Product_name)
+
+    except Exception as e:
+        print e
+        wrongname_MSG = "Sorry This product is not availble as per request."
+        reprompt_MSG = "Do you want to hear about more Products ?"
+        card_TEXT = "Use the full form."
+        card_TITLE = "Wrong Product."
+        return output_json_builder_with_reprompt_and_card(wrongname_MSG, card_TEXT, card_TITLE, reprompt_MSG, False,False)
+    ResponseDataJson = json.loads(ResponseData.read())
+    availabepacks = ResponseDataJson['data']['information']['availabepacks']
+    numbercount = 0
+    countries = []
+    for pack in availabepacks:
+        countries.append(pack['country'])
+    mdata = [s.lower() for s in countries]
+    unique_data = set(mdata)
+    countries = list(unique_data)
+    checkPrice = ', '.join(map(str, countries))
+
+    wrongname_MSG = "Sorry This product is not availble as per requested Country, product is availble in following Countries : "+str(checkPrice)
+    reprompt_MSG = "Do you want to hear more about a particular Product?"
+    card_TEXT = "Use the full form."
+    card_TITLE = "Wrong Product."
+    mytestSession = {'packdatacheck': {'product': Product_name} ,'Product':Product_name}
+
+    return output_json_builder_with_reprompt_and_card(wrongname_MSG, card_TEXT, card_TITLE, reprompt_MSG,
+                                                              False, mytestSession)
 
 
 def SendResionWiseCountryNameDataReq(region_name):
