@@ -2,7 +2,8 @@ import json
 import urllib2
 import random
 
-BASEURL = 'http://3.89.184.128:6500/api/'
+# BASEURL = 'http://3.89.184.128:6500/api/'##Vijay Acoount 
+BASEURL = 'http://3.85.238.217:6500/api/'#ashish Acoount 
 
 # BASEURL = 'http://127.0.0.1:8000/api/'
 
@@ -91,7 +92,7 @@ def getTestingProduct(event):
     unique_data = set(mytest)
     myuniqueProducts = list(unique_data)
     myProducts = ', '.join(map(str, myuniqueProducts))
-    mreponse = 'As per Your requested following Products are availble '+str(myProducts)+' These kind of Products are availble for the demo purpose Please Continue with That .'
+    mreponse = 'for your request following Products are availble '+str(myProducts)+' These kind of Products are availble for the demo purpose Please Continue with That .'
     reprompt_MSG = "Are you satisfied with this answer ? "
     card_TEXT = "My Product list "
     card_TITLE = "My Product list"
@@ -208,9 +209,9 @@ def getOnlyProductData(event):
     regions_numbers = list(unique_R_data)
     if len(regions_numbers) > 1:
         contriesstring = ' , '.join(map(str, regions_numbers))
-        mreponse = 'As per Your requested ' + str(numbercount) + ' packs of ' + str(Product_name) + " are availble in " + str(contriesstring) + ' Do You want to check  Product information for specific regions ? Say a specific Region Name For example... (Eastern)'
+        mreponse = 'for ' + str(Product_name) +" "+ str(numbercount) + " packs are availble in " + str(contriesstring) + ' Do You want to check  Product information for specific regions ? Say a specific Region Name For example... (Eastern)'
     else:
-        mreponse = 'As per Your requested ' + str(numbercount) + ' packs of ' + str(Product_name) + " are availble in " + str(regions_numbers[0]) + ' Region and within ' + str(regions_numbers[0]) + ' Product available on' + str(len(countries)) + ' countries Do You want to check for All For all Countries information or specific country information ? Say All Countries or say a specific Resion Fox example... (India)'
+        mreponse = 'for ' + str(Product_name) +" "+ str(numbercount) + "   packs are availble in " + str(regions_numbers[0]) + ' Region and within ' + str(regions_numbers[0]) + ' Product available on' + str(len(countries)) + ' countries Do You want to check for All For all Countries information or specific country information ? Say All Countries or say a specific Resion Fox example... (India)'
     reprompt_MSG = "Do you want to hear more about a particular Product?"
     card_TEXT = "You've picked " + str(Product_name.lower())
     card_TITLE = "You've picked " + str(Product_name.lower())
@@ -271,7 +272,7 @@ def getOnlyCountryData(event):
             event['session']['attributes']['packdatacheck'] = {'Country': country_name}
             mtattribute = event['session']['attributes']
 
-    mreponse = 'As per Your requested ' + str(country_name) + ' ' + str(len(
+    mreponse = 'for ' + str(country_name) + ' ' + str(len(
         product_count)) + " products are availble . DO You want to check for AllProducts information or specific Product information ?"
     reprompt_MSG = "Do you want to hear more about AllProducts OR a particular Product ?"
     card_TEXT = "You've picked " + str(country_name.lower())
@@ -415,20 +416,20 @@ def BeforeStrength(Product_name, country_name, event, availabepacks,mtattribute)
         else:
             mymsg = ', '.join(map(str, unique_data))
             if len(unique_data) > 1 and str(strengths) not in  ["all","all strengths"]:
-                myreponse = "As per Your requested Product " + str(Product_name) + " in " + str(country_name) + " Strength is Not available, Avalible Strengths are  as Follows : "+str(mymsg) +" Please Choose One from thease or say all Strengths so I will Provide You the price types for the Strength "
+                myreponse = "for " + str(Product_name) + " in " + str(country_name) + " Strength is Not available, Avalible Strengths are  as Follows : "+str(mymsg) +" Please Choose One from thease or say all Strengths so I will Provide You the price types for the Strength "
             else:
-                myreponse = "As per Your requested Product " + str(Product_name) + " in " + str(country_name) + " Avalible Strength as follows : "+str(mymsg)+ "  Please Choose the Strength or say All Strengths so I will Provide You the price types for the Strength "
+                myreponse = "for " + str(Product_name) + " in " + str(country_name) + " Avalible Strength as follows : "+str(mymsg)+ "  Please Choose the Strength or say All Strengths so I will Provide You the price types for the Strength "
             mtattribute.update({'strengthCheck':True})
     elif len(unique_data) == 0:
-        myreponse = "As per Your requested Product " + str(Product_name) + " in " + str(country_name) + " Strengths are Not available"
+        myreponse = "for " + str(Product_name) + " in " + str(country_name) + " Strengths are Not available"
     elif len(unique_data) == 1:
         mdata = [s.lower() for s in msgteststrength]
         strength_count = set(mdata)
         unique_data = list(strength_count)
         mymsg = ', '.join(map(str, unique_data))
-        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(country_name) + ' ' + str(mymsg) + " strength  is availble,  Do you Want to know the availble price types for this Strength then say, " + str(mymsg) 
+        myreponse = "for " + str(Product_name) + " in " + str(country_name) + ' ' + str(mymsg) + " strength  is availble,  Do you Want to know the availble price types for this Strength then say, " + str(mymsg) 
     else:
-        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(country_name) + ' '  + str(len(unique_data)) + " Strength  are  available, Do you Want to know all Strength Or Specific Strength Wise Products"
+        myreponse = "for " + str(Product_name) + " in " + str(country_name) + ' '  + str(len(unique_data)) + " Strength  are  available, Do you Want to know all Strength Or Specific Strength Wise Products"
     reprompt_MSG = "Do you want to hear more about a particular Product?"
     card_TEXT = "You've picked " + str(Product_name.lower())
     card_TITLE = "You've picked " + str(Product_name.lower())
@@ -450,11 +451,11 @@ def DetailsStrength(Product_name, country_name, event, availabepacks,mtattribute
     unique_data = list(strength_count)
     mymsg = ', '.join(map(str, unique_data))
     if len(unique_data) == 0:
-        myreponse = "As per Your requested Product " + str(Product_name) + " in " + str(country_name) + " Strengths are Not available" + " DO You want to check More information So Say Any Product Name and Country name"
+        myreponse = "for " + str(Product_name) + " in " + str(country_name) + " Strengths are Not available" + " DO You want to check More information So Say Any Product Name and Country name"
     if len(unique_data)==1:
-        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(country_name) + ' ' + str(mymsg) + " strength  is availble,  Do you Want to know the availble price types for this Strength then say, " + str(mymsg) 
+        myreponse = "for " + str(Product_name) + " in " + str(country_name) + ' ' + str(mymsg) + " strength  is availble,  Do you Want to know the availble price types for this Strength then say, " + str(mymsg) 
     else:
-        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(country_name) + ' ' + "  following strength  are availble " + str(mymsg) + " Do you Want to know the price type for all Strength Or for a Specific Strength "
+        myreponse = "for " + str(Product_name) + " in " + str(country_name) + ' ' + "  following strength  are availble " + str(mymsg) + " Do you Want to know the price type for all Strength Or for a Specific Strength "
     reprompt_MSG = "Do you want to hear more about a particular strength or all strengths?"
     card_TEXT = "You've picked " + str(Product_name.lower())
     card_TITLE = "You've picked " + str(Product_name.lower())
@@ -497,13 +498,13 @@ def BeforePriceType(Product_name, country_name, event, availabepacks,mtattribute
     unique_data = list(strength_count)
     # mymsg = ', '.join(map(str, Mysenteces))
     if len(unique_data) == 0 or unique_data == []:
-        myreponse = "As per Your requested Product " + str(Product_name) + " in " + str(country_name) + " Packs are Not available " + " DO You want to check More information So Say Any Product Name and Country name"
+        myreponse = "for " + str(Product_name) + " in " + str(country_name) + " Packs are Not available " + " DO You want to check More information So Say Any Product Name and Country name"
     elif len(unique_data) == 1:
         PriceTypes = unique_data[0]
         # print PriceTypes
         return RetuenPrice(Product_name, country_name, event, strengths, PriceTypes, availabepacks)
     else:
-        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(country_name) + ' '  +str(len(unique_data))+ " Price Types are  available  , Do you Want to know the Prouct Details for  all PriceTypes Or Specific PriceType "
+        myreponse = "for " + str(Product_name) + " in " + str(country_name) + ' '  +str(len(unique_data))+ " Price Types are  available  , Do you Want to know the Prouct Details for  all PriceTypes Or Specific PriceType "
     reprompt_MSG = "Do you want to hear more about a particular Product?"
     card_TEXT = "You've picked " + str(Product_name.lower())
     card_TITLE = "You've picked " + str(Product_name.lower())
@@ -533,11 +534,11 @@ def DetailsPrice(Product_name, country_name, event, availabepacks,mtattribute):
     # print unique_data
     mymsg = ', '.join(map(str, unique_data))
     if len(unique_data) == 0 or unique_data == []:
-        myreponse = "As per Your requested Product " + str(Product_name) + " in " + str(country_name) + " Packs are Not available " + " DO You want to check More information So Say Any Product Name and Country name"
+        myreponse = "for " + str(Product_name) + " in " + str(country_name) + " Packs are Not available " + " DO You want to check More information So Say Any Product Name and Country name"
     if len(unique_data) == 1:
-        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(country_name) + ' ' + "  following price type availble " + str(mymsg) + " Do you Want to know the Product Details for this price type then say ,"+str(mymsg) 
+        myreponse = "for " + str(Product_name) + " in " + str(country_name) + ' ' + "  following price type availble " + str(mymsg) + " Do you Want to know the Product Details for this price type then say ,"+str(mymsg) 
     else:
-        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(country_name) + ' ' + "  following price types  are availble " + str(mymsg) + " Do you Want to know the Product Details for all price type Or for a Specific price type "
+        myreponse = "for " + str(Product_name) + " in " + str(country_name) + ' ' + "  following price types  are availble " + str(mymsg) + " Do you Want to know the Product Details for all price type Or for a Specific price type "
     reprompt_MSG = "Do you want to hear more about a particular price type or price types?"
     card_TEXT = "You've picked " + str(Product_name.lower())
     card_TITLE = "You've picked " + str(Product_name.lower())  
@@ -596,9 +597,9 @@ def RetuenPrice(Product_name, country_name, event, strengths, PriceTypes, availa
     print len(result)
     mymsg = ', '.join(map(str, result))
     if n == 1 :
-        myreponse = "As per Your requested Product " + str(Product_name) + " in " + str(country_name) + " Packs are Not available" + " DO You want to check More information So Say Any Product Name and Country name"
+        myreponse = "for " + str(Product_name) + " in " + str(country_name) + " Packs are Not available" + " DO You want to check More information So Say Any Product Name and Country name"
     else:
-        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(country_name) + ' ' + str(len(mdata_unique_data)) + " Packs are available in as follows  :" + str(mymsg) + " ...., Do You want to check More information So Say Any Product Name and Country name"  # +str(event['session']['attributes'])
+        myreponse = "for " + str(Product_name) + " in " + str(country_name) + ' ' + str(len(mdata_unique_data)) + " Packs are available in as follows  :" + str(mymsg) + " ...., Do You want to check More information So Say Any Product Name and Country name"  # +str(event['session']['attributes'])
     reprompt_MSG = "Do you want to hear more about a particular Product?"
     card_TEXT = "You've picked " + str(Product_name.lower())
     card_TITLE = "You've picked " + str(Product_name.lower())
@@ -651,17 +652,17 @@ def getProductCountryWiseDetailsPrice(Product_name, country_name, event):
     if packcount > 1:
         strgnthandpricetype = None
         if len(list(Myprice_type_list_unnique)) > 0 and len(list(Mystrength_list_unnique)) > 0:
-            if len(list(Myprice_type_list_unnique))==1:
+            if len(list(Mystrength_list_unnique)) == 1:
                 strgnthandpricetype = str(Mystrength_list_commaSeprated)+" strengths is available Do you Want to know the availble price types for this Strength then say, " + str(Mystrength_list_commaSeprated) 
             else:
                 strgnthandpricetype = str(len(list(Mystrength_list_unnique)))+" strengths are available Do You want to check all strengths or a specific strength"# + +''# + ' and Avalible PriceTypes = ' + Myprice_type_list_commaSeprated
         # else:
-        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(country_name) + " " + str(strgnthandpricetype) #+ " Packs are availble !\n Do You want to check all packs or check for a specific pack ?"# \n Say all Packs , Say strength Of Medicine For example 100 MG \n or Say Price Type So I Can Give you a Filtred Result" + str(strgnthandpricetype)
+        myreponse = "for " + str(Product_name) + " in " + str(country_name) + " " + str(strgnthandpricetype) #+ " Packs are availble !\n Do You want to check all packs or check for a specific pack ?"# \n Say all Packs , Say strength Of Medicine For example 100 MG \n or Say Price Type So I Can Give you a Filtred Result" + str(strgnthandpricetype)
         # reprompt_MSG = "Do You want to chek all packs or check a specific pack ? For all packs say Allpacks and For a specific pack give me a pack name or strength of pack so I can tell you the available specific packs."
         reprompt_MSG = "Do You want to check all strengths or a specific strength"
         mtattribute = {'packdatacheck': {'country': country_name, 'product': Product_name},'Product': Product_name, 'Country': country_name}
     else:
-        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(country_name) + " is available in following pack :" + str(checkPrice) + " DO You want to check More information So Say Any Product Name and Country name"  # +str(event['session']['attributes'])
+        myreponse = "for " + str(Product_name) + " in " + str(country_name) + " is available in following pack :" + str(checkPrice) + " DO You want to check More information So Say Any Product Name and Country name"  # +str(event['session']['attributes'])
         mtattribute = {'Product': False, 'Country': False}
         reprompt_MSG = "Do you want to hear more about a particular Product?"
     card_TEXT = "You've picked " + str(Product_name.lower())
@@ -717,7 +718,7 @@ def getProductResionWiseDetailsPrice(Product_name, region_name, event):
     mtattribute = {}
     # checkPrice = ', '.join(map(str, Mysenteces))
     if packcount > 1:
-        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(
+        myreponse = "for " + str(Product_name) + " in " + str(
             region_name) + " are availble in  " + str(len(unique_data)) + ' Countries with ' + str(
             packcount) + " Packs! \n Do You want to chek all Countries data Or specific Country Data "  # +str(event['session']['attributes'])
         reprompt_MSG = "Do You want to chek for all Countries or check  for a specific Countries ? For all Countries say AllCountries and For a specific Countries give me a Country name "
@@ -725,7 +726,7 @@ def getProductResionWiseDetailsPrice(Product_name, region_name, event):
             event['session']['attributes']['packdatacheck'].update({'region':region_name})
             mtattribute = event['session']['attributes']
     else:
-        myreponse = "As per Your selected Product " + str(Product_name) + " in " + str(region_name) + " is available in following pack :" + str(checkPrice + " DO You want to check More information So Say Any Product Name and Country name")  # +str(event['session']['attributes'])
+        myreponse = "for " + str(Product_name) + " in " + str(region_name) + " is available in following pack :" + str(checkPrice + " DO You want to check More information So Say Any Product Name and Country name")  # +str(event['session']['attributes'])
         mtattribute = {'Product': False, 'region': False}
         mtattribute.update(event['session']['attributes'])
         reprompt_MSG = "Do you want to hear more about a particular Country?"
@@ -771,7 +772,7 @@ def GetAllProductInformationWithinCountry(event):
             unique_data = set(mdata)
             countries = list(unique_data)
             contriesstring = ', '.join(map(str, countries))
-            mreponse = 'As per Your requested ' + str(numbercount) + ' packs of ' + str(
+            mreponse = 'for ' + str(numbercount) + ' packs of ' + str(
                 Product_name) + " are availble in " + str(contriesstring)
             reprompt_MSG = "Do you want to hear more about a particular Product?"
             card_TEXT = "You've picked " + str(Product_name.lower())
@@ -795,7 +796,7 @@ def GetAllProductInformationWithinCountry(event):
             countrycount = availabepacks['country']
             Countries = ', '.join(map(str, countrycount))
             availabepacks_count = availabepacks['availabepacks']
-            mreponse = 'As per Your requested ' + str(region_name) + ' following countries availabe ' + str(
+            mreponse = 'for ' + str(region_name) + ' following countries availabe ' + str(
                 Countries) + ' .DO You want to specific Countries information ?'
             reprompt_MSG = "DO You want to check for a specific Countries information ?"
             card_TEXT = "You've picked " + str(region_name.lower())
@@ -854,11 +855,11 @@ def GetAllCountryInformationWithinProduct(event):
         product_list = list(product_count)
         product_names = ', '.join(map(str, product_list))
         if numbercount > 1:
-            mreponse = 'As per Your requested ' + str(country_name) + ' ' + str(
+            mreponse = 'for ' + str(country_name) + ' ' + str(
                 len(product_count)) + " products are availble, and following are the names of product " + str(
                 product_names)
         else:
-            mreponse = 'As per Your requested ' + str(country_name) + ' ' + str(
+            mreponse = 'for ' + str(country_name) + ' ' + str(
                 len(product_count)) + " products are availble following are the Details information of product " + str(
                 checkPrice)
         reprompt_MSG = "Do you want to hear more about AllProducts OR a particular Product ?"
@@ -906,7 +907,7 @@ def getOnlyRegionsData(event):
     availabepacks = ResponseDataJson['data']['information']
     countrycount = availabepacks['countrycount']
     availabepacks_count = availabepacks['availabepacks']
-    mreponse = 'As per Your requested ' + str(region_name) + '  ' + str(
+    mreponse = 'for ' + str(region_name) + '  ' + str(
         availabepacks_count) + ' Packs are availble in ' + str(
         countrycount) + " countries. DO You want to check for All Countries information or specific Countries information ?"
     reprompt_MSG = "Do You want to check for All Countries information or specific Countries information ?"
@@ -1011,7 +1012,7 @@ def SendResionWiseCountryNameDataReq(region_name):
 
 
 def stop_the_skill(event):
-    stop_MSG = "Thank you. Bye! we will meet after some time"
+    stop_MSG = "Thank you. Bye!"
     reprompt_MSG = ""
     card_TEXT = "Bye."
     card_TITLE = "Bye Bye."
